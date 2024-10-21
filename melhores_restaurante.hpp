@@ -22,8 +22,13 @@ struct Usuario {
     string pais;
 };
 
+struct RestaurantesNosAnos{
+    string nome;
+    int qnt;
+};
+
 vector<Restaurante> recuperarRestaurantesPorAno(string endereco, int ano);
-void escreverHistorico(string endereco, string titulo, vector<Restaurante> restaurantes);
+void escreverHistorico(string endereco, string titulo, vector<string> restaurantes);
 void atualizarUsuario(string endereco, Usuario usuario);
 Usuario receberInformacoes();
 vector<Restaurante> melhoresRestaurantesProximos(string enderecoRestaurantes, string enderecoUsuario);
@@ -32,4 +37,8 @@ void paisesComMaisRestaurantesEmAno(string endereco, int ano);
 vector<string> rankingPaises(vector<string> paises, vector<int> qtdPais);
 bool paisNoVetor(string pais, vector<string> paises);
 void limparLatitudeLongitude(string enderecoOriginal);
+void restaurantesQueMaisAparecemTodosOsAnos(string endereco);
+bool restauranteNoVetor(string restaurante, vector<RestaurantesNosAnos> restaurantes);
+void aumentarQntRestaurante(vector<RestaurantesNosAnos> &restaurantes, string restaurante);
+vector<string> rankingRestaurantes(vector<RestaurantesNosAnos> restaurantes);
 #endif

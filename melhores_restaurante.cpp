@@ -24,15 +24,15 @@ vector<Restaurante> recuperarRestaurantesPorAno(string endereco, int ano)
     return restaurantes;
 }
 
-void escreverHistorico(string endereco, string titulo, vector<Restaurante> restaurantes)
+void escreverHistorico(string endereco, string titulo, vector<string> restaurantes)
 {
     ofstream arquivo(endereco, ios::app);
     if(!arquivo.is_open()){
         cout<<"Erro"<<endl;
     }
     arquivo<<titulo<<endl;
-    for(Restaurante r: restaurantes){
-        arquivo<<r.ano<<","<<r.rank<<","<<r.nome<<","<<r.cidade<<","<<r.pais<<endl;
+    for(string r: restaurantes){
+        arquivo<<r<<endl;
     }
     arquivo.close();
 }
@@ -84,6 +84,11 @@ vector<Restaurante> melhoresRestaurantesProximos(string enderecoRestaurantes, st
             restaurantesProximos.push_back(r);
         }
     }
+    vector<string> nomes;
+    for(Restaurante r: restaurantes){
+        nomes.push_back(r.nome);
+    }
+    escreverHistorico("historico.txt", "MELHORES RESTAURANTES PROXIMOS", nomes);
     return restaurantesProximos;
 }
 
@@ -121,6 +126,8 @@ void paisesComMaisRestaurantesEmAno(string endereco, int ano)
         cout<<cont<<" - "<<p<<endl;
         cont++;
     }
+    string titulo = "TOP 3 PAISES COM MAIS RESTAURANTES EM " + to_string(ano);
+    escreverHistorico("historico.txt", titulo, top3Paises);
 }
 
 vector<string> rankingPaises(vector<string> paises, vector<int> qtdPais){
@@ -174,4 +181,65 @@ void limparLatitudeLongitude(string enderecoOriginal)
     }
     arquivoOriginal.close();
     arquivoCopia.close();
+}
+
+void restaurantesQueMaisAparecemTodosOsAnos(string endereco)
+{
+
+    vector<RestaurantesNosAnos> restaurantesAnos;
+
+    for(int i = 2002; i <= 2023; i++){
+        vector<Restaurante> restaurantes = recuperarRestaurantesPorAno(endereco, i);       
+        for(Restaurante r: restaurantes){
+            if(!restauranteNoVetor(r.nome, restaurantesAnos)){
+                restaurantesAnos.push_back({r.nome, 1});
+            }else{
+                aumentarQntRestaurante(restaurantesAnos, r.nome);
+            }
+        }
+    }
+    vector<string> top3Restaurantes = rankingRestaurantes(restaurantesAnos);
+    int cont = 1;
+    for(string p: top3Restaurantes){
+        cout<<cont<<" - "<<p<<endl;
+        cont++;
+    };
+    escreverHistorico("historico.txt", "TOP 3 RESTAURANTES COM MAIS PRESENCA NO RANKING AO LONGO DOS ANOS", top3Restaurantes);
+}
+
+bool restauranteNoVetor(string restaurante, vector<RestaurantesNosAnos> restaurantes){
+    for(RestaurantesNosAnos r: restaurantes){
+        if(r.nome == restaurante){
+            return true;
+        }
+    }
+    return false;
+}
+
+void aumentarQntRestaurante(vector<RestaurantesNosAnos> &restaurantes, string restaurante){
+    for(int i = 0; i <= restaurantes.size(); i++){
+        if(restaurantes[i].nome == restaurante){
+            restaurantes[i].qnt++;
+            break;
+        }
+    }
+}
+
+vector<string> rankingRestaurantes(vector<RestaurantesNosAnos> restaurantes){
+    string top1, top2, top3;
+    int top1Valor = 0, top2Valor = 0, top3Valor = 0;
+    for(RestaurantesNosAnos r: restaurantes){
+        if(r.qnt > top1Valor){
+            top1Valor = r.qnt;
+            top1 = r.nome;
+        }else if(r.qnt < top1Valor && r.qnt > top2Valor){
+            top2Valor = r.qnt;
+            top2 = r.nome;
+        }else if(r.qnt < top1Valor && r.qnt < top2Valor && r.qnt > top3Valor){
+            top3Valor = r.qnt;
+            top3 = r.nome;
+        }
+    }
+    vector<string> top3Restaurantes = {top1, top2, top3};
+    return top3Restaurantes;
 }
