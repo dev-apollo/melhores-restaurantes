@@ -46,7 +46,34 @@ void atualizarUsuario(string endereco, Usuario usuario)
     arquivo<<usuario.nome<<","<<usuario.cidade<<","<<usuario.pais<<""<<endl;
     arquivo.close();
 }
-;
+void atualizarLocalizaçãoUsuario(string endereco) {
+    ifstream arquivoUsuario(endereco);
+    string nomeUsuario;
+    if (arquivoUsuario.is_open())
+    {
+        string linha;
+        getline(arquivoUsuario,linha);
+        istringstream iss(linha);
+        getline(iss, nomeUsuario, ',');
+    }else{
+        cout << "Erro ao abrir o arquivo" << endl;
+    }
+
+    ofstream arquivo(endereco);
+    if (arquivo.is_open())
+    {
+        string cidade,pais;
+        cout << "Informe a cidade atual: ";
+        getline(cin, cidade);
+        cout <<"Informe o pais atual: ";
+        getline(cin,pais);
+        
+        arquivo << nomeUsuario <<","<<cidade<<","<<pais <<endl;
+    }
+    
+    arquivoUsuario.close();
+    arquivo.close();
+};
 Usuario receberInformacoes()
 {
     Usuario usuario;
