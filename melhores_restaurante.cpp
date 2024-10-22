@@ -46,7 +46,7 @@ void atualizarUsuario(string endereco, Usuario usuario)
     arquivo<<usuario.nome<<","<<usuario.cidade<<","<<usuario.pais<<""<<endl;
     arquivo.close();
 }
-void atualizarLocalizaçãoUsuario(string endereco) {
+void atualizarLocalizacaoUsuario(string endereco) {
     ifstream arquivoUsuario(endereco);
     string nomeUsuario;
     if (arquivoUsuario.is_open())
@@ -63,25 +63,26 @@ void atualizarLocalizaçãoUsuario(string endereco) {
     if (arquivo.is_open())
     {
         string cidade,pais;
-        cout << "Informe a cidade atual: ";
+        cout << "Informe a cidade atual (Em ingles): ";
+        cin.ignore();
         getline(cin, cidade);
-        cout <<"Informe o pais atual: ";
+        cout <<"Informe o pais atual (Em ingles): ";
         getline(cin,pais);
-        
         arquivo << nomeUsuario <<","<<cidade<<","<<pais <<endl;
     }
     
     arquivoUsuario.close();
     arquivo.close();
 };
+
 Usuario receberInformacoes()
 {
     Usuario usuario;
     cout<<"Insira seu nome: ";
     getline(cin, usuario.nome);
-    cout<<"Insira sua cidade atual: ";
+    cout<<"Insira sua cidade atual (Em ingles): ";
     getline(cin, usuario.cidade);
-    cout<<"Insira seu pais atual: ";
+    cout<<"Insira seu pais atual (Em ingles): ";
     getline(cin, usuario.pais);
     return usuario;
 }
